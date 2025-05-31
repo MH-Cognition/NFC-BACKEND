@@ -26,9 +26,9 @@ class EmployeeSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 class PublicEmployeeSerializer(serializers.ModelSerializer):
-    department = serializers.CharField(source='department.name')
-    organization = serializers.UUIDField(source='organization.id')
-    profile_pic = serializers.ImageField()
+    department = serializers.CharField(source='department.name', read_only=True)
+    organization = serializers.UUIDField(source='organization.id', read_only=True)
+    profile_pic = serializers.ImageField(read_only=True)
 
     class Meta:
         model = Employee

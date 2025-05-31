@@ -34,13 +34,23 @@ class DepartmentViewSet(viewsets.ModelViewSet):
 class EmployeeViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
+    
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [AllowAny()]
+        return [IsAuthenticated()]
 
     def get_queryset(self):
         return Employee.objects.filter(organization=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(organization=self.request.user)
+        
+    def get_serializer_class(self):
+        if self.action in ['list', 'retrieve']:
+            return PublicEmployeeSerializer
+        return EmployeeSerializer
 
 class PublicEmployeeView(APIView):
     permission_classes = [AllowAny]
