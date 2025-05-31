@@ -58,7 +58,10 @@ MIDDLEWARE = [
 
 AUTH_USER_MODEL = 'core.Organization'
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = [
+    "https://nfc.mhcockpit.com",
+    "https://nfccms.mhcockpit.com"
+]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
