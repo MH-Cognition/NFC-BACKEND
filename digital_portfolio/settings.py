@@ -80,7 +80,7 @@ AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME')
 # AWS_QUERYSTRING_AUTH = False
 
 # Media
-PUBLIC_MEDIA_LOCATION = 'employees'
+PUBLIC_MEDIA_LOCATION = 'media'
 
 # Optional: set media URL if you want to serve media files directly from S3
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.ap-south-1.amazonaws.com'

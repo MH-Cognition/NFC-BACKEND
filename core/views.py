@@ -1,5 +1,6 @@
 from rest_framework import viewsets, permissions
 from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -35,6 +36,7 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
     # permission_classes = [permissions.IsAuthenticated]
+    parser_classes = (MultiPartParser, FormParser)  # ✅ Add this line
     
     def get_permissions(self):
         if self.request.method == 'GET':
