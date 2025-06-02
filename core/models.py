@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from core.storage_backends import MediaStorage
 
 class OrganizationManager(BaseUserManager):
     def create_user(self, username, password=None, **extra_fields):
@@ -57,7 +58,15 @@ class Employee(models.Model):
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    profile_pic = models.ImageField(upload_to='employees/', blank=True, null=True)
+    
+    # Use custom S3 storage for profile picture
+    profile_pic = models.ImageField(
+        storage=MediaStorage(),  # This ensures it saves in `media/employees/`
+        upload_to='employees/',
+        blank=True,
+        null=True
+    )
+
     name = models.CharField(max_length=255)
     contact_no = models.CharField(max_length=20)
     email = models.EmailField()
@@ -65,8 +74,8 @@ class Employee(models.Model):
     designation = models.CharField(max_length=255)
     linkedin_url = models.URLField()
     blood_group = models.CharField(max_length=3, choices=BLOOD_GROUP_CHOICES, default='O+')
-    department = models.ForeignKey(Department, on_delete=models.CASCADE)
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    department = models.ForeignKey('Department', on_delete=models.CASCADE)
+    organization = models.ForeignKey('Organization', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -69,25 +70,19 @@ REST_FRAMEWORK = {
     ),
 }
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+load_dotenv()
+
+DEFAULT_FILE_STORAGE = 'core.storage_backends.MediaStorage'
+
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
-AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME')
-# AWS_QUERYSTRING_AUTH = False
+AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME', 'ap-south-1')
 
-# To serve media files with public URLs without query params
-# AWS_QUERYSTRING_AUTH = False
-
-# Media
-PUBLIC_MEDIA_LOCATION = 'media'
-
-# Optional: set media URL if you want to serve media files directly from S3
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.ap-south-1.amazonaws.com'
-MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
-
-# (Optional) If you want to set ACL permissions (default is 'private')
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 AWS_DEFAULT_ACL = 'public-read'
+AWS_QUERYSTRING_AUTH = False
 
 DATABASE_NAME = 'nfcdatabase'
 DATABASE_USER = 'MHCOCKPIT'
