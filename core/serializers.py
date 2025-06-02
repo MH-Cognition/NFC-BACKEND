@@ -24,6 +24,18 @@ class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
         fields = '__all__'
+
+    def update(self, instance, validated_data):
+        # If profile_pic is None or missing, don't overwrite the existing image
+        profile_pic = validated_data.get('profile_pic', None)
+        if profile_pic is None:
+            validated_data.pop('profile_pic', None)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+        return instance
         
 class PublicEmployeeSerializer(serializers.ModelSerializer):
     department = serializers.CharField(source='department.name', read_only=True)
